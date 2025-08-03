@@ -10,6 +10,15 @@ export const authMiddleware = expressjwt({
   secret,
 });
 
+export function decodeToken(token) {
+  try {
+    const decoded = jwt.verify(token, secret);
+    return decoded;
+  } catch (error) {
+    return null;
+  }
+}
+
 export async function handleLogin(req, res) {
   const { username, password } = req.body;
   const user = await getUser(username);
@@ -18,6 +27,6 @@ export async function handleLogin(req, res) {
   } else {
     const claims = { sub: username };
     const token = jwt.sign(claims, secret);
-    res.json({ token });  
+    res.json({ token });
   }
 }
